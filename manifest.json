@@ -1,0 +1,18 @@
+{
+  "id": "dev.username.PluginTemplate",
+  "name": "unofficial Plugin Template",
+  "description": "An unofficial replugged plugin template",
+  "author": {
+    "name": "",
+    "discordID": "0",
+    "github": ""
+  },
+  "version": "1.1.0",
+  "updater": {
+    "type": "github",
+    "id": ""
+  },
+  "license": "MIT",
+  "type": "replugged-plugin",
+  "renderer": "src/index.js"
+}

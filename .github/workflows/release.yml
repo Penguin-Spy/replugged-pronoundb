@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: true
+
+      - name: Bundle into .asar
+        run: pnpm run bundle
+
+      - name: Publish via GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "*.asar"
+          makeLatest: true

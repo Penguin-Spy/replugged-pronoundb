@@ -1,0 +1,4 @@
+/* Example css to flip the Discord logo in the top right upside down */
+.wordmark-2u86JB {
+  transform: scaleY(-1);
+}
