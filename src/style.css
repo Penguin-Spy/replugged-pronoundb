@@ -1,4 +1,21 @@
-/* Example css to flip the Discord logo in the top right upside down */
-.wordmark-2u86JB {
-  transform: scaleY(-1);
+/* style chat elements */
+.pronoundb-pronouns {
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: default;
+  pointer-events: none;
+  margin-left: .5rem;
+  height: 1.25rem;
+  color: var(--text-muted);
+  display: inline-block;
+}
+.pronoundb-pronouns[data-compact="true"] {
+  display: inline;
+}
+
+/* funny css because the JS doesn't have enough info to determine this */
+div[id^="message-reply-context"] > .pronoundb-pronouns { display: none; }
+/* todo: this could be a setting tbh (default to only when compact) */
+span[id^="message-username-"]:not(:hover) > .pronoundb-pronouns[data-compact="true"] {
+  display: none;
 }

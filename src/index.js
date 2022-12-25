@@ -1,21 +1,25 @@
 import { Injector, webpack, Logger } from "replugged";
-// import { React, flux as Flux, fluxDispatcher as FluxDispatcher } from "replugged/common";
-// import thing from "./stuff.js"
+import { React } from "replugged/common";
+
+import Pronouns from "./components/Pronouns.js";
 import "./style.css"
 
 const inject = new Injector();
-const logger = new Logger("Plugin", "dev.username.PluginTemplate");
 
 export async function start() {
-  const typingMod = await webpack.waitForModule(webpack.filters.byProps("startTyping"));
-  const getChannelMod = await webpack.waitForModule(webpack.filters.byProps("getChannel"));
+  // pronouns in message header
+  webpack.waitForModule(webpack.filters.bySource(/.=.\.renderPopout,.=.\.decorations,/))
+    .then(MessageHeaderUsername => {
+      const functionKey = Object.entries(MessageHeaderUsername).find(e => typeof e[1] === "function")[0]
 
-  if(typingMod && getChannelMod) {
-    inject.instead(typingMod, "startTyping", ([channel]) => {
-      const channelObj = getChannelMod.getChannel(channel);
-      logger.log(`Typing prevented! Channel: #${channelObj?.name ?? "unknown"} (${channel}).`);
-    });
-  }
+      inject.after(MessageHeaderUsername, functionKey, ([props], res) => {
+        // this is hidden with css when in a reply or in compact mode (until hovered)
+        res.props.children.push(
+          React.createElement(Pronouns, { userId: props.message.author.id, compact: props.compact })
+        )
+        return res
+      })
+    })
 }
 
 export function stop() {
