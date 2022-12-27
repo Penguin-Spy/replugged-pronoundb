@@ -1,4 +1,4 @@
-[![Replugged](https://img.shields.io/badge/client-Replugged-7289da?logo=discord&logoColor=fff)](https://replugged.dev/)  
+[![downloads](https://img.shields.io/github/downloads/Penguin-Spy/replugged-pronoundb/latest/total?color=ff69b4&logo=github)](https://github.com/Penguin-Spy/replugged-pronoundb/releases/latest/download/dev.penguinspy.pronoundb.asar) [![Replugged](https://img.shields.io/badge/client-Replugged-7289da?logo=discord&logoColor=fff)](https://replugged.dev/)  
 # PronounDB for Replugged
 Shows users' [PronounDB](https://pronoundb.org) pronouns in chat so that you don't accidentally misgender people.
 

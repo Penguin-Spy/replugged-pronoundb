@@ -6,7 +6,6 @@ const Endpoints = Object.freeze({
 })
 
 const Pronouns = Object.freeze({
-  unspecified: null,
   // -- list is sorted alphabetically
   hh: 'he/him',
   hi: 'he/it',

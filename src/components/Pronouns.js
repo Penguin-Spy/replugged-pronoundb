@@ -10,7 +10,7 @@ function Pronouns({ userId, pronouns: userPronouns, compact }) {
   if(!userPronouns) return null
 
   return React.createElement("span", { className: "pronoundb-pronouns", "data-compact": compact },
-    React.createElement(React.Fragment, {}, PronounStrings[userPronouns])
+    React.createElement(React.Fragment, null, PronounStrings[userPronouns] + '  • ')
   )
 }
 
