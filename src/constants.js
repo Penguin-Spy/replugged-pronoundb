@@ -30,8 +30,16 @@ const Pronouns = Object.freeze({
   avoid: 'Avoid pronouns, use my name',
 })
 
+const DefaultSettings = Object.freeze({
+  hover: "compact", // "never" (always show pronouns), "compact", "always" (always hide until hover)
+  format: "lowercase", // "lowercase", "pascal"
+  // show_own_pronouns: true,
+  // show_in_chat: true,
+})
+
 export {
   WEBSITE,
   Endpoints,
-  Pronouns
+  Pronouns,
+  DefaultSettings
 }

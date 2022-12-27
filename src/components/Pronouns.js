@@ -2,15 +2,19 @@ import { React, flux as Flux } from "replugged/common";
 import pronounDBStore from "../pronounStore.js";
 import { Pronouns as PronounStrings } from "../constants.js";
 
-function Pronouns({ userId, pronouns: userPronouns, compact }) {
+function Pronouns({ userId, pronouns: userPronouns, compact, settings }) {
   // only fetch pronouns when rendered for a different user
   React.useEffect(() => void pronounDBStore.fetchPronouns(userId), [userId])
 
   // pronouns not loaded or no pronouns set
   if(!userPronouns) return null
 
-  return React.createElement("span", { className: "pronoundb-pronouns", "data-compact": compact },
-    React.createElement(React.Fragment, null, PronounStrings[userPronouns])
+  return React.createElement("span", {
+    className: "pronoundb-pronouns",
+    "data-compact": compact,
+    "data-hover": settings.get("hover"),
+    "data-format": settings.get("format")
+  }, React.createElement(React.Fragment, null, PronounStrings[userPronouns])
   )
 }
 

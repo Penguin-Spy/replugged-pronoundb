@@ -9,14 +9,16 @@
   color: var(--text-muted);
   display: inline-block;
 }
-.pronoundb-pronouns[data-compact="true"] {
-  display: inline;
-}
+.pronoundb-pronouns[data-compact="true"] { display: inline }
 .pronoundb-pronouns[data-compact="false"]::after {
   content: "•";
   display: inherit;
   margin-left: 0.25rem;
   margin-right: -0.25rem;
+}
+
+.pronoundb-pronouns[data-format="pascal"] {
+  text-transform: capitalize;
 }
 
 /* less margin when there's a role icon (but not when there's a system tag) */
@@ -26,7 +28,11 @@ span[class*="hasRoleIcon-"]:not([class*="hasSystemTag-"]) > .pronoundb-pronouns 
 
 /* funny css because the JS doesn't have enough info to determine this */
 div[id^="message-reply-context"] > .pronoundb-pronouns { display: none; }
-/* todo: this could be a setting tbh (default to only when compact) */
-span[id^="message-username-"]:not(:hover) > .pronoundb-pronouns[data-compact="true"] {
+
+/* hide pronouns until username is hovered */
+span[id^="message-username-"]:not(:hover) > :is(
+  .pronoundb-pronouns[data-hover="always"],
+  .pronoundb-pronouns[data-hover="compact"][data-compact="true"]
+) {
   display: none;
 }
