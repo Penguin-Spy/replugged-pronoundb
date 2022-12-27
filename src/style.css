@@ -21,9 +21,12 @@
   text-transform: capitalize;
 }
 
-/* less margin when there's a role icon (but not when there's a system tag) */
+/* fix margin when there's a role icon (and not a system tag) */
 span[class*="hasRoleIcon-"]:not([class*="hasSystemTag-"]) > .pronoundb-pronouns {
   margin-left: .25rem;
+}
+span[class*="hasRoleIcon-"]:not([class*="hasSystemTag-"]) > .pronoundb-pronouns::after {
+  margin-right: 0;
 }
 
 /* funny css because the JS doesn't have enough info to determine this */
