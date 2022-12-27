@@ -12,14 +12,16 @@
 .pronoundb-pronouns[data-compact="true"] {
   display: inline;
 }
+.pronoundb-pronouns[data-compact="false"]::after {
+  content: "•";
+  display: inherit;
+  margin-left: 0.25rem;
+  margin-right: -0.25rem;
+}
 
 /* less margin when there's a role icon (but not when there's a system tag) */
 span[class*="hasRoleIcon-"]:not([class*="hasSystemTag-"]) > .pronoundb-pronouns {
   margin-left: .25rem;
-}
-/* fix weird margin with the system tag spacing (mostly for compatibility with StaffTags) */
-span[class*="hasSystemTag-"] > .pronoundb-pronouns {
-  margin-right: -.25rem;
 }
 
 /* funny css because the JS doesn't have enough info to determine this */
