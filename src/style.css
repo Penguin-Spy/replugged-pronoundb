@@ -29,7 +29,7 @@ span[class*="hasRoleIcon-"]:not([class*="hasSystemTag-"]) > .pronoundb-pronouns:
   margin-right: 0;
 }
 
-/* funny css because the JS doesn't have enough info to determine this */
+/* hide pronouns in reply previews (funny css because the JS doesn't have enough info to determine this) */
 div[id^="message-reply-context"] > .pronoundb-pronouns { display: none; }
 
 /* hide pronouns until username is hovered */
