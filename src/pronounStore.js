@@ -16,19 +16,41 @@ const SOURCE = `Replugged/4.0.0-beta0.18, Discord/${GLOBAL_ENV.RELEASE_CHANNEL}`
 
 class PronounDBStore extends Flux.Store {
   // ensure we have the user's pronouns
-  async fetchPronouns(id) {
+  async fetchPronouns(id, force) {
     // if we already have the pronouns or are already fetching it, do nothing
-    if(id in pronounsList || id in requestedPronouns) return;
+    if(id in pronounsList || (id in requestedPronouns && !force)) return
 
     // otherwise, start an asynchronous request for the users pronouns
-    requestedPronouns[id] = true;
+    requestedPronouns[id] = true
     // todo: wait for all effects to happen & then do a bulk lookup
-    let pronouns = await fetch(Endpoints.LOOKUP(id), { headers: { "x-pronoundb-source": SOURCE } })
-      .then(r => r.json()).then(r => r.pronouns)
-      .catch((err) => {
-        if(err.statusCode != 404) console.warn(`[pronounDB] fetch for ${id} failed:`, err)
-        return // won't re-request, & stores undefined instead of false
-      })
+    const res = await fetch(Endpoints.LOOKUP(id), { headers: { "x-pronoundb-source": SOURCE } })
+
+    let pronouns
+    if(res.ok) {
+      try { pronouns = (await res.json()).pronouns }
+      catch(e) {
+        logger.warn(`parse failed:`, e)
+        pronouns = false
+      }
+
+    } else if([429, 500, 503].includes(res.status)) {
+      logger.warn(`fetch error: ${res.status} ${res.statusText}`, res)
+      let retryMs = Number.parseInt(res.headers.get("retry-after")) * 1000
+
+      if(isNaN(retryMs)) retryMs = (Date.parse(res.headers.get("retry-after")) - new Date())
+      if(isNaN(retryMs)) retryMs = 15e3
+
+      // create re-request timeout
+      setTimeout(() => {
+        logger.log(`re-fetching ${id}`)
+        this.fetchPronouns(id, true)
+      }, retryMs)
+      return // and don't save/dispatch anything yet
+
+    } else if(res.status != 404) {
+      logger.warn(`fetch for ${id} failed:`, err)
+      pronouns = false
+    }
 
     // postprocess returned pronouns
     if(pronouns === "unspecified") pronouns = false
