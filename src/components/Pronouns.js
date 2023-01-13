@@ -4,7 +4,7 @@ import { Pronouns as PronounStrings } from "../constants.js";
 
 function Pronouns({ userId, pronouns: userPronouns, compact, settings }) {
   // only fetch pronouns when rendered for a different user
-  React.useEffect(() => void pronounDBStore.fetchPronouns(userId), [userId])
+  React.useEffect(() => void pronounDBStore.usePronouns(userId), [userId])
 
   // pronouns not loaded or no pronouns set
   if(!userPronouns) return null

@@ -4,10 +4,10 @@ Shows users' [PronounDB](https://pronoundb.org) pronouns in chat so that you don
 
 # Features
 - Shows pronouns in the message header next to the username.
+- Uses the bulk-lookup API endpoint for faster, more efficient loading.
 ### planned features
-- use bulk lookup endpoint to fix ratelimiting (sorry for spamming your api Cynthia)
 - Show pronouns in the user popout/modal.
-- More settings for customization (not displaying your pronouns, showing in popout/modal)
+- More settings for customization (not displaying your own pronouns, showing in popout/modal)
 - Locally setting pronouns for other users who don't have a PronounDB account.
 
 # Settings

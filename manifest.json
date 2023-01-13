@@ -7,7 +7,7 @@
     "discordID": "97399302313242624",
     "github": "Penguin-Spy"
   },
-  "version": "1.0.4b",
+  "version": "1.0.5b",
   "updater": {
     "type": "github",
     "id": "Penguin-Spy/replugged-pronoundb"

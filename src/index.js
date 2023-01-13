@@ -1,13 +1,13 @@
-import { Injector, webpack, Logger, settings as SettingsManager } from "replugged";
-import { React } from "replugged/common";
+import { Injector, webpack, Logger, settings as SettingsManager } from "replugged"
+import { React } from "replugged/common"
 
-import Pronouns from "./components/Pronouns.js";
-import { DefaultSettings } from "./constants.js";
+import Pronouns from "./components/Pronouns.js"
+import { DefaultSettings } from "./constants.js"
 import "./style.css"
 
 const PLUGIN_ID = "dev.penguinspy.pronoundb"
-const inject = new Injector();
-const logger = new Logger("Plugin", PLUGIN_ID);
+const inject = new Injector()
+const logger = Logger.plugin("PronounDB")
 const settings = await SettingsManager.init(PLUGIN_ID)
 
 export async function start() {
