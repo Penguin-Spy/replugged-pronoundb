@@ -1,3 +1,4 @@
+import { AssertionError } from "assert";
 import { readFileSync } from "fs";
 import { join, dirname, extname } from "path";
 
@@ -43,7 +44,12 @@ function readFile(fileName) {
   file.output = ""
   file.requiredFiles = [] // requirements are parsed by parseAndModifyImports
   file.imported = false
-  file.type = extname(file.name) === ".css" ? "style" : "script"
+  switch(extname(file.name)) {
+    case ".css": file.type = "style"; break
+    case ".jsx": file.type = "component"; break
+    default: file.type = "script"
+  }
+  //file.type = extname(file.name) === ".css" ? "style" : (extname(file.name) === "jsx" ? "component" : "script")
   return file
 }
 
@@ -166,6 +172,125 @@ function wrapFile(file) {
 }
 
 
+function parseJsxRecursive(input, parentTagName) {
+  const startingInputLength = input.length
+  let children = []
+
+  while(true) {
+    // use closing parenthesis to know when the tag is done (?)
+    if(input.match(/^\s*\)/)) {
+      break;
+    }
+
+    /*try {
+      // have to read what this captures and add as literal text children to children[]
+      input = consumeLiteral(input, /^.*?(?=[<{])/s)
+    } catch(e) {
+      // probably is reaching the end of the file without finding a closing tag.
+      throw e
+    }*/
+
+    if(input.startsWith("</")) {
+      const [fullMatch, tagName] = input.match(/^<\/([a-zA-Z]+)>/s)
+      if(tagName !== parentTagName) {
+        throw new SyntaxError(`Closing tag '</${tagName}>' does not match opening tag '<${parentTagName}>'`)
+      }
+      console.log(`Ending child element ${tagName}`)
+
+      input = input.substring(fullMatch.length)
+      break;
+
+    } else if(input.startsWith("<")) {
+      let [fullMatch, tagName, props] = input.match(/^<([a-zA-Z]+)\s*(.*?)>/s)
+      input = input.substring(fullMatch.length)
+
+      console.log(`Beginning child element ${tagName}`)
+
+      // enclose HTML tag names in quotes
+      const reactTagName = (tagName.toLowerCase() === tagName) ? `"${tagName}"` : tagName
+      let output = `\n  React.createElement(${reactTagName}, { `
+
+      // props
+      while(props.length > 0) {
+        if(props.startsWith("{...")) {
+          const [fullMatch, contents] = props.match(/^{(.*?)}\s*/s)
+          props = props.substring(fullMatch.length)
+          output += `${contents}, `
+        } else {
+          const [fullMatch, key, value] = props.match(/^(\w+)\s*=\s*(?:['"](.*)["'](?:$|\s)|{(.*?)})\s*/s)
+          props = props.substring(fullMatch.length)
+
+          output += `${key}: (\`${value.replace('`', '\\`')}\`), `
+        }
+      }
+
+      // contents of tag
+      const [childrenString, consumedLength] = parseJsxRecursive(input, tagName)
+      input = input.substring(consumedLength)
+      output += `}, ${childrenString})`
+
+      children.push(output)
+
+    } else if(input.startsWith("{")) {
+      const [fullMatch, contents] = input.match(/^{(.*?)}/s)
+      input.substring(fullMatch.length)
+      children.push(`\`\${${contents}}\``)
+
+    } else { // normal text
+      const [fullMatch, contents] = input.match(/^\s*(.*?)\s*(?=[<{])/s)
+      input = input.substring(fullMatch.length)
+      // this also removes whitespace, so only add it as a child if there's actual text
+      if(contents !== "") {
+        children.push(`\`${contents}\``)
+      }
+    }
+
+  }
+
+
+  const output = `[${children.join(",")}]`
+  const consumedLength = startingInputLength - input.length;
+
+  return [output, consumedLength] // or something like this
+
+
+
+  // parse <div props="val">  OR   plain text   OR   {embeddedJavascript()}
+
+
+
+}
+
+function transpileJsx(file) {
+  wrapFile(file)
+
+  // rewind file read head
+  let input = file.output;
+  let output = "";
+
+  const jsxStartRegex = /(?:return|=)\s*\(\s*(<[a-zA-Z]+.*?>)/ms;
+  let match = input.match(jsxStartRegex)
+  while(match !== null) {
+    const startOfJsx = match.index + match[0].length - match[1].length
+
+    output += input.substring(0, startOfJsx) // add all stuff before the tag starts
+    input = input.substring(startOfJsx) // put start of input right before the start of the 1st tag
+
+    const [childrenString, consumedLength] = parseJsxRecursive(input)
+    input = input.substring(consumedLength)
+    output += childrenString
+
+    console.log("returned")
+
+    match = input.match(jsxStartRegex)
+  }
+
+
+  file.input = "";
+  file.output = output + input + "\n// JSX\n";
+}
+
+
 const allRequiredFiles = {};
 // key = "path/filename.js"
 // values = file object
@@ -174,7 +299,7 @@ function recursivelyImport(fileName) {
   if(fileName in allRequiredFiles) return // do nothing if it's already required
   const file = readFile(fileName)
   allRequiredFiles[file.name] = file
-  if(file.type === "style") return // css doesn't need any preprocessing (todo: inline @import rules?)
+  if(file.type === "style") return // css doesn't need any preprocessing
 
   parseAndModifyImports(file)
   file.requiredFiles.forEach(recursivelyImport)
@@ -211,10 +336,14 @@ export default function transpile(filename) {
       case "script":
         wrapFile(nextFile)
         scriptOutput += `// ${nextFile.name}\n` + nextFile.output + "\n"
-        break;
+        break
+      case "component":
+        transpileJsx(nextFile)
+        scriptOutput += `// ${nextFile.name}\n` + nextFile.output + "\n"
+        break
       case "style":
         styleOutput += `/* ${nextFile.name} */\n` + nextFile.input + "\n"
-        break;
+        break
     }
     nextFile = nextImportableFile()
   }

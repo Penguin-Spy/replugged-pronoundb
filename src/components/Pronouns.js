@@ -2,7 +2,7 @@ import { React, flux as Flux } from "replugged/common";
 import pronounDBStore from "../pronounStore.js";
 import { Pronouns as PronounStrings } from "../constants.js";
 
-function Pronouns({ userId, pronouns: userPronouns, compact, settings }) {
+function Pronouns({ userId, pronouns: userPronouns, compact }) {
   // only fetch pronouns when rendered for a different user
   React.useEffect(() => void pronounDBStore.usePronouns(userId), [userId])
 

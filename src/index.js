@@ -5,19 +5,15 @@ import Pronouns from "./components/Pronouns.js"
 import { DefaultSettings } from "./constants.js"
 import "./style.css"
 
+import { Settings } from "./components/Settings.jsx";
+export { Settings };
+
 const PLUGIN_ID = "dev.penguinspy.pronoundb"
 const inject = new Injector()
 const logger = Logger.plugin("PronounDB")
-const settings = await SettingsManager.init(PLUGIN_ID)
+const settings = await SettingsManager.init(PLUGIN_ID, DefaultSettings)
 
 export async function start() {
-  for(const [key, value] of Object.entries(DefaultSettings)) {
-    if(!settings.has(key)) {
-      logger.log(`Adding new setting ${key} with value`, value);
-      settings.set(key, value);
-    }
-  }
-
   // pronouns in message header
   webpack.waitForModule(webpack.filters.bySource(/.=.\.renderPopout,.=.\.decorations,/))
     .then(MessageHeaderUsername => {
@@ -26,7 +22,7 @@ export async function start() {
       inject.after(MessageHeaderUsername, functionKey, ([props], res) => {
         // this is hidden with css when in a reply or in compact mode (until hovered)
         res.props.children.push(
-          React.createElement(Pronouns, { userId: props.message.author.id, compact: props.compact, settings })
+          React.createElement(Pronouns, { userId: props.message.author.id, compact: props.compact })
         )
         return res
       })
