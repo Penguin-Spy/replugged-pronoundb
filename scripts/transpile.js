@@ -177,21 +177,8 @@ function parseJsxRecursive(input, parentTagName) {
   let children = []
 
   while(true) {
-    // use closing parenthesis to know when the tag is done (?)
-    if(input.match(/^\s*\)/)) {
-      break;
-    }
-
-    /*try {
-      // have to read what this captures and add as literal text children to children[]
-      input = consumeLiteral(input, /^.*?(?=[<{])/s)
-    } catch(e) {
-      // probably is reaching the end of the file without finding a closing tag.
-      throw e
-    }*/
-
     if(input.startsWith("</")) {
-      const [fullMatch, tagName] = input.match(/^<\/([a-zA-Z]+)>/s)
+      const [fullMatch, tagName] = input.match(/^<\/(\w+)>/s)
       if(tagName !== parentTagName) {
         throw new SyntaxError(`Closing tag '</${tagName}>' does not match opening tag '<${parentTagName}>'`)
       }
@@ -201,7 +188,7 @@ function parseJsxRecursive(input, parentTagName) {
       break;
 
     } else if(input.startsWith("<")) {
-      let [fullMatch, tagName, props] = input.match(/^<([a-zA-Z]+)\s*(.*?)>/s)
+      let [fullMatch, tagName, props] = input.match(/^<(\w+)\s*(.*?)>/s)
       input = input.substring(fullMatch.length)
 
       console.log(`Beginning child element ${tagName}`)
@@ -217,10 +204,11 @@ function parseJsxRecursive(input, parentTagName) {
           props = props.substring(fullMatch.length)
           output += `${contents}, `
         } else {
-          const [fullMatch, key, value] = props.match(/^(\w+)\s*=\s*(?:['"](.*)["'](?:$|\s)|{(.*?)})\s*/s)
+          const [fullMatch, key, stringValue, jsValue] = props.match(/^(\w+)\s*=\s*(?:['"](.*)["'](?:$|\s)|{(.*?)})\s*/s)
           props = props.substring(fullMatch.length)
 
-          output += `${key}: (\`${value.replace('`', '\\`')}\`), `
+          const value = jsValue ?? `(\`${stringValue.replace('`', '\\`')}\`)`
+          output += `${key}: ${value}, `
         }
       }
 
@@ -230,11 +218,12 @@ function parseJsxRecursive(input, parentTagName) {
       output += `}, ${childrenString})`
 
       children.push(output)
+      if(parentTagName === undefined) break // just finished top level parent element
 
     } else if(input.startsWith("{")) {
       const [fullMatch, contents] = input.match(/^{(.*?)}/s)
-      input.substring(fullMatch.length)
-      children.push(`\`\${${contents}}\``)
+      input = input.substring(fullMatch.length)
+      children.push(contents)
 
     } else { // normal text
       const [fullMatch, contents] = input.match(/^\s*(.*?)\s*(?=[<{])/s)
@@ -248,7 +237,7 @@ function parseJsxRecursive(input, parentTagName) {
   }
 
 
-  const output = `[${children.join(",")}]`
+  const output = children.length === 1 ? children[0] : `[${children.join(",")}]`
   const consumedLength = startingInputLength - input.length;
 
   return [output, consumedLength] // or something like this
@@ -268,7 +257,7 @@ function transpileJsx(file) {
   let input = file.output;
   let output = "";
 
-  const jsxStartRegex = /(?:return|=)\s*\(\s*(<[a-zA-Z]+.*?>)/ms;
+  const jsxStartRegex = /(?:return|=)\s*\(\s*(<\w+.*?>)/ms;
   let match = input.match(jsxStartRegex)
   while(match !== null) {
     const startOfJsx = match.index + match[0].length - match[1].length
