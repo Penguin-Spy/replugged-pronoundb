@@ -31,15 +31,29 @@ const Pronouns = Object.freeze({
 })
 
 const DefaultSettings = Object.freeze({
-  hover: "compact", // "never" (always show pronouns), "compact", "always" (always hide until hover)
-  format: "lowercase", // "lowercase", "pascal"
-  // show_own_pronouns: true,
-  // show_in_chat: true,
+  hover: "compact",
+  format: "lowercase",
+  show_own_pronouns: true,
+  show_in_chat: true
 })
+
+const DropdownSettings = Object.freeze({
+  hover: [
+    { label: "Compact", value: "compact" },
+    { label: "Always", value: "always" },
+    { label: "Never (always show)", value: "never" }
+  ],
+  format: [
+    { label: "Lowercase", value: "lowercase" },
+    { label: "Pascal", value: "pascal" }
+  ]
+})
+
 
 export {
   WEBSITE,
   Endpoints,
   Pronouns,
-  DefaultSettings
+  DefaultSettings,
+  DropdownSettings
 }

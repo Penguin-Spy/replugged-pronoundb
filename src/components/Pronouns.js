@@ -1,4 +1,4 @@
-import { React, flux as Flux } from "replugged/common";
+import { React, flux as Flux, users } from "replugged/common";
 import pronounDBStore from "../pronounStore.js";
 import { Pronouns as PronounStrings } from "../constants.js";
 
@@ -8,6 +8,7 @@ function Pronouns({ userId, pronouns: userPronouns, compact }) {
 
   // pronouns not loaded or no pronouns set
   if(!userPronouns) return null
+  if(!settings.get("show_own_pronouns") && userId === users.getCurrentUser().id) return null
 
   return React.createElement("span", {
     className: "pronoundb-pronouns",

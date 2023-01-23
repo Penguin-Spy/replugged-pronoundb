@@ -5,27 +5,13 @@ Shows users' [PronounDB](https://pronoundb.org) pronouns in chat so that you don
 # Features
 - Shows pronouns in the message header next to the username.
 - Uses the bulk-lookup API endpoint for faster, more efficient loading.
+- Settings are configured in the Replugged plugins menu.
+- Hide your own pronouns locally (for taking screenshots, etc.)
 ### planned features
 - Show pronouns in the user popout/modal.
-- More settings for customization (not displaying your own pronouns, showing in popout/modal)
+- More settings for customization (~~not displaying your own pronouns~~, showing in popout/modal)
 - Locally setting pronouns for other users who don't have a PronounDB account.
 
-# Settings
-Since Replugged is currently in beta, settings must be configured using DevTools:
-```js
-// Always run this first line to load the settings
-PronounDB = await replugged.settings.init("dev.penguinspy.pronoundb")
-// Then run one of the following lines to choose each setting:
-
-/* when to hide pronouns until the username is hovered */
-PronounDB.set("hover", "compact") // only in compact mode (default)
-PronounDB.set("hover", "never")   // always show pronouns
-PronounDB.set("hover", "always")  // always hide until hovered
-
-/* pronoun capitalization format */
-PronounDB.set("format", "lowercase") // all lowercase: they/them (default)
-PronounDB.set("format", "pascal")    // pascal case: They/Them
-```
 
 # Known Issues
 None, if you encounter any issues *with the features that are curently implemented*, [please open a GitHub issue](https://github.com/Penguin-Spy/replugged-pronoundb/issues).

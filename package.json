@@ -1,6 +1,6 @@
 {
   "name": "replugged-pronoundb",
-  "version": "1.0.5b",
+  "version": "1.1.0b",
   "description": "Shows users' PronounDB pronouns in chat so that you don't accidentally misgender people.",
   "author": "Penguin_Spy",
   "scripts": {
