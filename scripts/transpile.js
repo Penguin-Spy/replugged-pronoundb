@@ -1,4 +1,3 @@
-import { AssertionError } from "assert";
 import { readFileSync } from "fs";
 import { join, dirname, extname } from "path";
 
@@ -195,13 +194,14 @@ function parseJsxRecursive(input, parentTagName) {
       let output = `\n  React.createElement(${reactTagName}, { `
 
       // props
+      let skipChildren = props.endsWith("/");
       while(props.length > 0) {
         if(props.startsWith("{...")) {
           const [fullMatch, contents] = props.match(/^{(.*?)}\s*/s)
           props = props.substring(fullMatch.length)
           output += `${contents}, `
         } else {
-          const [fullMatch, key, stringValue, jsValue] = props.match(/^(.+?)\s*=\s*(?:['"](.*)["'](?:$|\s)|{(.*?)})\s*/s)
+          const [fullMatch, key, stringValue, jsValue] = props.match(/^(.+?)\s*=\s*(?:['"](.*?)["'](?:$|\s|\/)|{(.*?}?)})\s*\/?/s)
           props = props.substring(fullMatch.length)
 
           const value = jsValue ?? `(\`${stringValue.replace('`', '\\`')}\`)`
@@ -210,9 +210,13 @@ function parseJsxRecursive(input, parentTagName) {
       }
 
       // contents of tag
-      const [childrenString, consumedLength] = parseJsxRecursive(input, tagName)
-      input = input.substring(consumedLength)
-      output += `}, ${childrenString})`
+      if(!skipChildren) {
+        const [childrenString, consumedLength] = parseJsxRecursive(input, tagName)
+        input = input.substring(consumedLength)
+        output += `}, ${childrenString ?? ""})`
+      } else {
+        output += "})"
+      }
 
       children.push(output)
       if(parentTagName === undefined) break // just finished top level parent element
@@ -232,7 +236,7 @@ function parseJsxRecursive(input, parentTagName) {
     }
   }
 
-  const output = children.length === 1 ? children[0] : `[${children.join(",")}]`
+  const output = children.length <= 1 ? children[0] : `[${children.join(",")}]`
   const consumedLength = startingInputLength - input.length;
   return [output, consumedLength]
 }

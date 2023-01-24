@@ -33,14 +33,6 @@ function transpileAll() {
     if(styleOutput !== "") writeFileSync("dist/renderer.css", styleOutput)
     distManifest.renderer = "renderer.js"
   }
-  if(manifest.preload) {
-    writeFileSync("dist/preload.js", transpile(manifest.preload)[0])
-    distManifest.renderer = "preload.js"
-  }
-  if(manifest.main) {
-    writeFileSync("dist/main.js", transpile(manifest.main)[0])
-    distManifest.renderer = "main.js"
-  }
   if(manifest.plaintextPatches) {
     writeFileSync("dist/plaintextPatches.js", transpile(manifest.plaintextPatches)[0])
     distManifest.renderer = "plaintextPatches.js"
