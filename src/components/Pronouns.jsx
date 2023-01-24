@@ -10,13 +10,15 @@ function Pronouns({ userId, pronouns: userPronouns, compact }) {
   if(!userPronouns) return null
   if(!settings.get("show_own_pronouns") && userId === users.getCurrentUser().id) return null
 
-  return React.createElement("span", {
-    className: "pronoundb-pronouns",
-    "data-compact": compact,
-    "data-hover": settings.get("hover"),
-    "data-format": settings.get("format")
-  }, React.createElement(React.Fragment, null, PronounStrings[userPronouns])
-  )
+  return (
+    <span
+      className="pronoundb-pronouns"
+      data-compact={compact}
+      data-hover={settings.get("hover")}
+      data-format={settings.get("format")}>
+      {PronounStrings[userPronouns]}
+    </span>
+  );
 }
 
 export default Flux.connectStores(

@@ -1,7 +1,7 @@
 import { Injector, webpack, Logger, settings as SettingsManager } from "replugged"
 import { React } from "replugged/common"
 
-import Pronouns from "./components/Pronouns.js"
+import Pronouns from "./components/Pronouns.jsx"
 import { DefaultSettings } from "./constants.js"
 import "./style.css"
 

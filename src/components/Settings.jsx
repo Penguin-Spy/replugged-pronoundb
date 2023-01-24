@@ -54,7 +54,7 @@ export function Settings() {
         note="lowercase: 'they/them', pascal: 'They/Them'"
         options={DropdownSettings.format}
         {...useDropdownSetting(settings, "format")}>
-        Pronoun capitalizatoin
+        Pronoun capitalization
       </DropdownMenuItem>
       <SwitchItem
         note="When off, your pronouns will not be shown on your screen. They will still be visible to other users."
