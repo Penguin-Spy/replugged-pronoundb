@@ -182,7 +182,6 @@ function parseJsxRecursive(input, parentTagName) {
       if(tagName !== parentTagName) {
         throw new SyntaxError(`Closing tag '</${tagName}>' does not match opening tag '<${parentTagName}>'`)
       }
-      console.log(`Ending child element ${tagName}`)
 
       input = input.substring(fullMatch.length)
       break;
@@ -190,8 +189,6 @@ function parseJsxRecursive(input, parentTagName) {
     } else if(input.startsWith("<")) {
       let [fullMatch, tagName, props] = input.match(/^<(\w+)\s*(.*?)>/s)
       input = input.substring(fullMatch.length)
-
-      console.log(`Beginning child element ${tagName}`)
 
       // enclose HTML tag names in quotes
       const reactTagName = (tagName.toLowerCase() === tagName) ? `"${tagName}"` : tagName
@@ -204,11 +201,11 @@ function parseJsxRecursive(input, parentTagName) {
           props = props.substring(fullMatch.length)
           output += `${contents}, `
         } else {
-          const [fullMatch, key, stringValue, jsValue] = props.match(/^(\w+)\s*=\s*(?:['"](.*)["'](?:$|\s)|{(.*?)})\s*/s)
+          const [fullMatch, key, stringValue, jsValue] = props.match(/^(.+?)\s*=\s*(?:['"](.*)["'](?:$|\s)|{(.*?)})\s*/s)
           props = props.substring(fullMatch.length)
 
           const value = jsValue ?? `(\`${stringValue.replace('`', '\\`')}\`)`
-          output += `${key}: ${value}, `
+          output += `"${key}": ${value}, `
         }
       }
 
@@ -233,21 +230,11 @@ function parseJsxRecursive(input, parentTagName) {
         children.push(`\`${contents}\``)
       }
     }
-
   }
-
 
   const output = children.length === 1 ? children[0] : `[${children.join(",")}]`
   const consumedLength = startingInputLength - input.length;
-
-  return [output, consumedLength] // or something like this
-
-
-
-  // parse <div props="val">  OR   plain text   OR   {embeddedJavascript()}
-
-
-
+  return [output, consumedLength]
 }
 
 function transpileJsx(file) {
@@ -257,7 +244,7 @@ function transpileJsx(file) {
   let input = file.output;
   let output = "";
 
-  const jsxStartRegex = /(?:return|=)\s*\(\s*(<\w+.*?>)/ms;
+  const jsxStartRegex = /(?:return|=)\s*\((\s*<\w+.*?>)/ms;
   let match = input.match(jsxStartRegex)
   while(match !== null) {
     const startOfJsx = match.index + match[0].length - match[1].length
@@ -269,14 +256,12 @@ function transpileJsx(file) {
     input = input.substring(consumedLength)
     output += childrenString
 
-    console.log("returned")
-
     match = input.match(jsxStartRegex)
   }
 
 
   file.input = "";
-  file.output = output + input + "\n// JSX\n";
+  file.output = output + input;
 }
 
 
