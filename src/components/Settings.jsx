@@ -29,7 +29,11 @@ function DropdownMenuItem(props) {
   const res = SwitchItem({
     note: props.note, children: props.children
   })
-  res.props.children[0].props.children.props.children[1] = (
+
+  const switchItemElement = res?.props?.children?.[0]?.props?.children?.props?.children
+  if(switchItemElement === undefined) return null
+
+  switchItemElement[1] = (
     <DropdownMenu
       options={props.options}
       isSelected={props.isSelected}
