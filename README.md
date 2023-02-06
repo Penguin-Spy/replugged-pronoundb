@@ -1,4 +1,4 @@
-[![downloads](https://img.shields.io/github/downloads/Penguin-Spy/replugged-pronoundb/latest/total?color=ff69b4&logo=github)](https://github.com/Penguin-Spy/replugged-pronoundb/releases/latest/download/dev.penguinspy.pronoundb.asar) [![Replugged](https://img.shields.io/badge/client-Replugged-7289da?logo=discord&logoColor=fff)](https://replugged.dev/)  
+![downloads](https://img.shields.io/github/downloads/Penguin-Spy/replugged-pronoundb/latest/total?color=ff69b4&logo=github) [![Install for Replugged](https://img.shields.io/badge/Replugged-Install-7289da?logo=discord&logoColor=fff)](https://replugged.dev/install?source=github&identifier=Penguin-Spy/replugged-pronoundb)  
 # PronounDB for Replugged
 Shows users' [PronounDB](https://pronoundb.org) pronouns in chat so that you don't accidentally misgender people.
 
@@ -18,7 +18,7 @@ None, if you encounter any issues *with the features that are curently implement
 
 # Installation
 ## Replugged
-[Download the latest .asar](https://github.com/Penguin-Spy/replugged-pronoundb/releases/latest/download/dev.penguinspy.pronoundb.asar) and copy it to [your plugins folder](https://github.com/replugged-org/replugged#installing-plugins-and-themes).
+Click [here](https://replugged.dev/install?source=github&identifier=Penguin-Spy/replugged-pronoundb) to install the latest version.
 
 ### Other client mods
 There's also [Juby210's PronounDB plugin](https://github.com/Juby210/Aliucord-plugins#pronoundb) for the Java version of [Aliucord](https://github.com/Aliucord/Aliucord "A Discord mod for Android"). (not affiliated)
