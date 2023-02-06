@@ -1,6 +1,11 @@
 import asar from "@electron/asar";
-import { readFileSync } from "fs";
+import { readFileSync, copyFileSync, existsSync, mkdirSync } from 'fs';
 
 const manifest = JSON.parse(readFileSync("manifest.json", "utf-8"));
 
-asar.createPackage("dist", `${manifest.id}.asar`);
+if(!existsSync("bundle")) mkdirSync("bundle")
+
+asar.createPackage("dist", `bundle/${manifest.id}.asar`);
+copyFileSync("dist/manifest.json", `bundle/${manifest.id}.json`);
+
+console.log(`Bundled ${manifest.name} (${manifest.id})`)

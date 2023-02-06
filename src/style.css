@@ -30,7 +30,10 @@ span[class*="hasRoleIcon-"]:not([class*="hasSystemTag-"]) > .pronoundb-pronouns:
 }
 
 /* hide pronouns in reply previews (funny css because the JS doesn't have enough info to determine this) */
-div[id^="message-reply-context"] > .pronoundb-pronouns { display: none; }
+div:is(
+  [id^="message-reply-context"],
+  [class*="threadMessageAccessory-"]
+) > .pronoundb-pronouns { display: none; }
 
 /* hide pronouns until username is hovered */
 span[id^="message-username-"]:not(:hover) > :is(
