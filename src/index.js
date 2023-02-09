@@ -21,10 +21,17 @@ export async function start() {
         const functionKey = Object.entries(MessageHeaderUsername).find(e => typeof e[1] === "function")[0]
 
         inject.after(MessageHeaderUsername, functionKey, ([props], res) => {
+          const headerItems = res.props.children
+
           // this is hidden with css when in a reply or in compact mode (until hovered)
-          res.props.children.push(
-            React.createElement(Pronouns, { userId: props.message.author.id, compact: props.compact })
-          )
+          const pronouns = React.createElement(Pronouns, { userId: props.message.author.id, compact: props.compact, pronounDB: true })
+
+          const insertIndex = headerItems.findIndex(e => e?.props?.pronounDBCompat)
+          if(insertIndex > 0 && headerItems[insertIndex].props.pronounDBCompat === "pronoundb") {
+            headerItems.splice(insertIndex, 0, pronouns)
+          } else {
+            headerItems.push(pronouns)
+          }
           return res
         })
       })
