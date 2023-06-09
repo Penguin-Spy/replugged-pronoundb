@@ -24,6 +24,6 @@ Click [here](https://replugged.dev/install?source=github&identifier=Penguin-Spy/
 There's also [Juby210's PronounDB plugin](https://github.com/Juby210/Aliucord-plugins#pronoundb) for the Java version of [Aliucord](https://github.com/Aliucord/Aliucord "A Discord mod for Android"). (not affiliated)
 
 # Legal
-Licensed under MIT. Copyright (c) 2022 Penguin_Spy
+Licensed under MIT. Copyright (c) 2023 Penguin_Spy
 
 This plugin is not mantained, endorsed by or in any way affiliated with pronoundb.org or Cynthia!  

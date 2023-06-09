@@ -186,7 +186,7 @@ function parseJsxRecursive(input, parentTagName) {
       break;
 
     } else if(input.startsWith("<")) {
-      let [fullMatch, tagName, props] = input.match(/^<(\w+)\s*(.*?)>/s)
+      let [fullMatch, tagName, props] = input.match(/^<(\w+)\s*(.*?)(?<!=)>/s) // negative lookbehind is to allow => functions in properties
       input = input.substring(fullMatch.length)
 
       // enclose HTML tag names in quotes
