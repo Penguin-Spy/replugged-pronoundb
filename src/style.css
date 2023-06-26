@@ -22,8 +22,9 @@
 }
 
 /* fix margin when there's a role icon (and not a system tag) */
-span[class*="hasRoleIcon-"]:not([class*="hasSystemTag-"]) > .pronoundb-pronouns {
+span[class*="hasRoleIcon-"]:not([class*="hasBadges-"]) > .pronoundb-pronouns {
   margin-left: .25rem;
+  margin-right: 0.25rem;
 }
 
 /* margins for pronoundb + discord pronouns */
@@ -46,4 +47,10 @@ span[id^="message-username-"]:not(:hover) > :is(
   .pronoundb-pronouns[data-hover="compact"][data-compact="true"]
 ) {
   display: none;
+}
+
+
+/* settings */
+.pronoundb-settings-notice {
+  margin-bottom: 20px;
 }

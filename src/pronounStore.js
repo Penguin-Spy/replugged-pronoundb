@@ -1,7 +1,6 @@
 import { flux as Flux, fluxDispatcher as FluxDispatcher } from "replugged/common";
-import { Endpoints } from "./constants";
-
-const SOURCE = `Replugged/4.0.0-beta0.20, Discord/${GLOBAL_ENV.RELEASE_CHANNEL}`
+import { LOOKUP, SOURCE } from "./constants";
+import { formatPronouns } from "./formatter";
 
 // map of loaded pronouns
 const pronounsMap = new Map()
@@ -32,7 +31,7 @@ function restartFetchTimeout() {
 async function fetchPronouns(ids) {
   ids.forEach(id => requestedPronouns.add(id))
 
-  const res = await fetch(ids.length > 1 ? Endpoints.LOOKUP_BULK(ids) : Endpoints.LOOKUP(ids[0]))
+  const res = await fetch(LOOKUP(ids), { headers: { "x-pronoundb-source": SOURCE } })
 
   if(!res.ok) {
     if([429, 500, 503].includes(res.status)) {
@@ -57,18 +56,27 @@ async function fetchPronouns(ids) {
 
   let data = await res.json()
 
-  for(let [id, pronouns] of Object.entries(data)) {
-    if(id === "pronouns") id = ids[0] // for non-batched requests
-    // postprocess returned pronouns
-    if(pronouns === "unspecified") pronouns = false
+  for(let [id, profile] of Object.entries(data)) {
+    let pronouns
+    if(!profile.sets) {
+      logger.warn(`Invalid API response: ${id}'s profile is missing 'sets'`, profile)
+      pronouns = false
+    } else {
+      // postprocess returned pronouns
+      pronouns = formatPronouns(profile.sets)
+    }
+
     // store them
     pronounsMap.set(id, pronouns)
-    // and notify connected components that the pronouns are available
-    FluxDispatcher.dispatch({
-      type: 'PRONOUNDB_PRONOUNS_LOADED',
-      id: id,
-      loadedPronouns: pronouns
-    })
+
+    // and notify connected components that the pronouns are available (if they're actually present)
+    if(pronouns) {
+      FluxDispatcher.dispatch({
+        type: 'PRONOUNDB_PRONOUNS_LOADED',
+        id: id,
+        loadedPronouns: pronouns
+      })
+    }
   }
 }
 

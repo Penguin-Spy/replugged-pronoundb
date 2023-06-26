@@ -1,18 +1,16 @@
 import { React, flux as Flux, users } from "replugged/common";
 import { getByProps } from "replugged/webpack";
 import pronounDBStore from "../pronounStore.js";
-import { Pronouns as PronounStrings } from "../constants.js";
 
 const { getUserProfile, getGuildMemberProfile } = getByProps("getUserProfile")
 
-function Pronouns({ user_id, guild_id, pronouns: userPronouns, compact }) {
+function Pronouns({ user_id, guild_id, pronouns: pronounDB_pronouns, compact }) {
   // only fetch pronouns when rendered for a different user
   React.useEffect(() => void pronounDBStore.usePronouns(user_id), [user_id])
 
   if(!settings.get("show_own_pronouns") && user_id === users.getCurrentUser().id) return null
 
   const mode = settings.get("show_discord_pronouns")
-  const pronounDB_pronouns = PronounStrings[userPronouns]
   let discord, pronounDB
 
   // try to load the user's Discord pronouns if both will be displayed, the Discord ones are prioritized, or PronounDB isn't present

@@ -1,10 +1,11 @@
 import { util } from "replugged";
-import { SwitchItem, SelectItem } from "replugged/components";
+import { SwitchItem, SelectItem, Notice } from "replugged/components";
 import { DropdownSettings } from "../constants.js";
 
 export function Settings() {
   return (
     <div>
+      <Notice messageType={Notice.Types.INFO} className="pronoundb-settings-notice">To change your pronouns, visit <a target="_blank" href="https://pronoundb.org/me">pronoundb.org/me</a></Notice>
       <SelectItem
         note="lowercase: 'they/them', pascal: 'They/Them'"
         options={DropdownSettings.format}

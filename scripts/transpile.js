@@ -227,16 +227,22 @@ function parseJsxRecursive(input, parentTagName) {
       children.push(contents)
 
     } else { // normal text
-      const [fullMatch, contents] = input.match(/^\s*(.*?)\s*(?=[<{])/s)
+      const [fullMatch, contents] = input.match(/^(.*?)(?=[<{])/s)
       input = input.substring(fullMatch.length)
       // this also removes whitespace, so only add it as a child if there's actual text
-      if(contents !== "") {
+      if(contents.trim() !== "") {
         children.push(`\`${contents}\``)
       }
     }
   }
 
-  const output = children.length <= 1 ? children[0] : `[${children.join(",")}]`
+  let output
+  if(children.length === 1 && children[0].startsWith("`") && children[0].endsWith("`")) {
+    const [fullMatch, contents] = children[0].match(/^`\s*(.*?)\s*`$/)  // trim whitespace from 'normal text' children that are enclosed in ``
+    output = `\`${contents}\``
+  } else {
+    output = `[${children.join(",")}]`
+  }
   const consumedLength = startingInputLength - input.length;
   return [output, consumedLength]
 }
