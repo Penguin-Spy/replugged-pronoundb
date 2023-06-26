@@ -6,12 +6,6 @@ export function Settings() {
   return (
     <div>
       <SelectItem
-        note="When to require hovering over the username to show pronouns."
-        options={DropdownSettings.hover}
-        {...util.useSetting(settings, "hover")}>
-        Hover mode
-      </SelectItem>
-      <SelectItem
         note="lowercase: 'they/them', pascal: 'They/Them'"
         options={DropdownSettings.format}
         {...util.useSetting(settings, "format")}>
@@ -27,6 +21,18 @@ export function Settings() {
         {...util.useSetting(settings, "show_in_chat")}>
         Show pronouns in chat
       </SwitchItem>
+      <SelectItem
+        note="Which pronouns to show if both Discord's and PronounDB's are present."
+        options={DropdownSettings.show_discord_pronouns}
+        {...util.useSetting(settings, "show_discord_pronouns")}>
+        Show Discord pronouns
+      </SelectItem>
+      <SelectItem
+        note="When to require hovering over the username to show pronouns."
+        options={DropdownSettings.hover}
+        {...util.useSetting(settings, "hover")}>
+        Hover mode
+      </SelectItem>
     </div>
   );
 }

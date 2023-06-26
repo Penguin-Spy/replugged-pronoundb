@@ -33,6 +33,7 @@ const Pronouns = Object.freeze({
 const DefaultSettings = Object.freeze({
   hover: "compact",
   format: "lowercase",
+  show_discord_pronouns: "pronoundb",
   show_own_pronouns: true,
   show_in_chat: true
 })
@@ -46,6 +47,12 @@ const DropdownSettings = Object.freeze({
   format: [
     { label: "Lowercase", value: "lowercase" },
     { label: "Pascal", value: "pascal" }
+  ],
+  show_discord_pronouns: [
+    { label: "Both", value: "both" },
+    { label: "Prioritize PronounDB", value: "pronoundb" },
+    { label: "Prioritize Discord", value: "discord" },
+    { label: "Never", value: "never" }
   ]
 })
 

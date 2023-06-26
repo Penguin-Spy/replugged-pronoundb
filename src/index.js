@@ -16,7 +16,7 @@ const settings = await SettingsManager.init(PLUGIN_ID, DefaultSettings)
 export async function start() {
   // pronouns in message header
   if(settings.get("show_in_chat")) {
-    webpack.waitForModule(webpack.filters.bySource(/.=.\.renderPopout,.=.\.decorations,/))
+    webpack.waitForModule(webpack.filters.bySource(/.=.\.renderPopout,.=.\.renderRemixTag,/))
       .then(MessageHeaderUsername => {
         const functionKey = Object.entries(MessageHeaderUsername).find(e => typeof e[1] === "function")[0]
 
@@ -24,7 +24,7 @@ export async function start() {
           const headerItems = res.props.children
 
           // this is hidden with css when in a reply or in compact mode (until hovered)
-          const pronouns = React.createElement(Pronouns, { userId: props.message.author.id, compact: props.compact, pronounDB: true })
+          const pronouns = React.createElement(Pronouns, { user_id: props.message.author.id, guild_id: props.channel.guild_id, compact: props.compact, pronounDB: true })
 
           const insertIndex = headerItems.findIndex(e => e?.props?.pronounDBCompat)
           if(insertIndex > 0 && headerItems[insertIndex].props.pronounDBCompat === "pronoundb") {
