@@ -21,7 +21,8 @@ function Pronouns({ user_id, guild_id, pronouns: pronounDB_pronouns, compact }) 
       discord = (<span
         className="pronoundb-pronouns pronoundb-discord"
         data-compact={compact}
-        data-hover={settings.get("hover")}>
+        data-hover={settings.get("hover")}
+        data-format={settings.get("format_discord_pronouns") ? settings.get("format") : null}>
         {discord_pronouns}
       </span>)
     }

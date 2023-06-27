@@ -28,6 +28,11 @@ export function Settings() {
         {...util.useSetting(settings, "show_discord_pronouns")}>
         Show Discord pronouns
       </SelectItem>
+      <SwitchItem
+        note="Applies your pronoun capitalization setting to user's Discord pronouns as well."
+        {...util.useSetting(settings, "format_discord_pronouns")}>
+        Format Discord pronouns
+      </SwitchItem>
       <SelectItem
         note="When to require hovering over the username to show pronouns."
         options={DropdownSettings.hover}

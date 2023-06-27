@@ -12,6 +12,7 @@ const DefaultSettings = Object.freeze({
   hover: "compact",
   format: "lowercase",
   show_discord_pronouns: "pronoundb",
+  format_discord_pronouns: false,
   show_own_pronouns: true,
   show_in_chat: true
 })
@@ -36,6 +37,7 @@ const DropdownSettings = Object.freeze({
 
 
 export {
+  PLUGIN_ID,
   WEBSITE,
   SOURCE,
   LOOKUP,

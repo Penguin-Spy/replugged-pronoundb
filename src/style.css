@@ -20,6 +20,9 @@
 .pronoundb-pronouns[data-format="pascal"] {
   text-transform: capitalize;
 }
+.pronoundb-discord[data-format="lowercase"] {
+  text-transform: lowercase;
+}
 
 /* fix margin when there's a role icon (and not a system tag) */
 span[class*="hasRoleIcon-"]:not([class*="hasBadges-"]) > .pronoundb-pronouns {
@@ -29,9 +32,6 @@ span[class*="hasRoleIcon-"]:not([class*="hasBadges-"]) > .pronoundb-pronouns {
 
 /* margins for pronoundb + discord pronouns */
 .pronoundb-pronouns ~ .pronoundb-discord {
-  margin-left: .5rem !important;
-}
-.ppl-moe-pronouns ~ .pronoundb-pronouns {
   margin-left: .5rem !important;
 }
 
