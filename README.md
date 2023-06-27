@@ -1,16 +1,17 @@
-![downloads](https://img.shields.io/github/downloads/Penguin-Spy/replugged-pronoundb/latest/total?color=ff69b4&logo=github) [![Install for Replugged](https://img.shields.io/badge/Replugged-Install-7289da?logo=discord&logoColor=fff)](https://replugged.dev/install?source=github&identifier=Penguin-Spy/replugged-pronoundb)  
+[![Install for Replugged](https://img.shields.io/badge/Replugged-Install-7289da?logo=discord&logoColor=fff)](https://replugged.dev/install?identifier=dev.penguinspy.pronoundb)  
 # PronounDB for Replugged
 Shows users' [PronounDB](https://pronoundb.org) pronouns in chat so that you don't accidentally misgender people.
 
 # Features
 - Shows pronouns in the message header next to the username.
-- Uses the bulk-lookup API endpoint for faster, more efficient loading.
+- Uses the version 2 API (suports more options for sets of pronouns).
+- Hide your own pronouns locally (for taking screenshots, screensharing, etc.)
+- Optionally show user's Discord pronouns in chat too, with options for which source has priority.
 - Settings are configured in the Replugged plugins menu.
-- Hide your own pronouns locally (for taking screenshots, etc.)
 ### planned features
 - Show pronouns in the user popout/modal.
 - More settings for customization (~~not displaying your own pronouns~~, showing in popout/modal)
-- Locally setting pronouns for other users who don't have a PronounDB account.
+- ~~Locally setting pronouns for other users who don't have a PronounDB account.~~ (no longer planned, the Discord pronouns feature mostly serves this purpose)
 
 
 # Known Issues
@@ -18,7 +19,7 @@ None, if you encounter any issues *with the features that are curently implement
 
 # Installation
 ## Replugged
-Click [here](https://replugged.dev/install?source=github&identifier=Penguin-Spy/replugged-pronoundb) to install the latest version.
+Click [here](https://replugged.dev/install?identifier=dev.penguinspy.pronoundb) to install the latest version.
 
 ### Other client mods
 There's also [Juby210's PronounDB plugin](https://github.com/Juby210/Aliucord-plugins#pronoundb) for the Java version of [Aliucord](https://github.com/Aliucord/Aliucord "A Discord mod for Android"). (not affiliated)
