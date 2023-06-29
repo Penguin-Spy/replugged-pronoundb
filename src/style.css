@@ -4,17 +4,16 @@
   font-weight: 500;
   cursor: default;
   pointer-events: none;
-  margin-left: .5rem;
+  margin-left: 0.25rem;
   height: 1.25rem;
   color: var(--text-muted);
   display: inline-block;
 }
-.pronoundb-pronouns[data-compact="true"] { display: inline }
+.pronoundb-pronouns[data-compact="true"] { display: inline; }
 .pronoundb-pronouns[data-compact="false"]::after {
   content: "•";
   display: inherit;
   margin-left: 0.25rem;
-  margin-right: -0.25rem;
 }
 
 .pronoundb-pronouns[data-format="pascal"] {
@@ -24,16 +23,11 @@
   text-transform: lowercase;
 }
 
-/* fix margin when there's a role icon (and not a system tag) */
-span[class*="hasRoleIcon-"]:not([class*="hasBadges-"]) > .pronoundb-pronouns {
-  margin-left: .25rem;
-  margin-right: 0.25rem;
+/* fix extra margin after username */
+[class*="header-"]>[id^="message-username-"] {
+  margin-right: 0;
 }
 
-/* margins for pronoundb + discord pronouns */
-.pronoundb-pronouns ~ .pronoundb-discord {
-  margin-left: .5rem !important;
-}
 
 /* hide pronouns in reply previews (funny css because the JS doesn't have enough info to determine this) */
 div:is(

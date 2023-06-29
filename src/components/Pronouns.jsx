@@ -1,8 +1,25 @@
 import { React, flux as Flux, users } from "replugged/common";
-import { getByProps } from "replugged/webpack";
+import { getByProps, getBySource, getFunctionBySource } from "replugged/webpack";
 import pronounDBStore from "../pronounStore.js";
 
-const { getUserProfile, getGuildMemberProfile } = getByProps("getUserProfile")
+const UserProfileStore = getByProps("getUserProfile")
+const { getUserProfile, getGuildMemberProfile } = UserProfileStore
+
+const fetchUserProfile = getFunctionBySource(getBySource(/withMutualGuilds,.=.\.withMutualFriendsCount,.=.\.guildId/), "apply")
+
+// gets a user's Discord pronouns, fetching the profile if it's not cached
+function getDiscordPronouns(userId, guildId) {
+  const userProfile = getUserProfile(userId)
+  if(!userProfile && !UserProfileStore.isFetchingProfile(userId)) { // if the profile isn't fetched yet, do so
+    fetchUserProfile(userId, { // this function fetches the profile and dispatches it to the UserProfileStore
+      guildId,
+      withMutualFriendsCount: false,
+      withMutualGuilds: true
+    })
+  } else {
+    return getGuildMemberProfile(userId, guildId)?.pronouns || userProfile?.pronouns
+  }
+}
 
 function Pronouns({ user_id, guild_id, pronouns: pronounDB_pronouns, compact }) {
   // only fetch pronouns when rendered for a different user
@@ -16,7 +33,7 @@ function Pronouns({ user_id, guild_id, pronouns: pronounDB_pronouns, compact }) 
   // try to load the user's Discord pronouns if both will be displayed, the Discord ones are prioritized, or PronounDB isn't present
   if(mode === "both" || mode === "discord" || (mode === "pronoundb" && !pronounDB_pronouns)) {
     // get the guild member pronouns, or the user's global pronouns if the guild ones don't exist (are the empty string or the profile is undefined)
-    const discord_pronouns = getGuildMemberProfile(user_id, guild_id)?.pronouns || getUserProfile(user_id)?.pronouns
+    const discord_pronouns = getDiscordPronouns(user_id, guild_id)
     if(discord_pronouns) {
       discord = (<span
         className="pronoundb-pronouns pronoundb-discord"

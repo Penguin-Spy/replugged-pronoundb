@@ -9,7 +9,7 @@
     "github": "Penguin-Spy"
   },
   "source": "https://github.com/Penguin-Spy/replugged-pronoundb",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "updater": {
     "type": "store",
     "id": "dev.penguinspy.pronoundb"

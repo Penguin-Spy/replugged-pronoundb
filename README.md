@@ -19,7 +19,7 @@ None, if you encounter any issues *with the features that are curently implement
 
 # Installation
 ## Replugged
-Click [here](https://replugged.dev/install?identifier=dev.penguinspy.pronoundb) to install the latest version.
+Click [here](https://replugged.dev/install?identifier=dev.penguinspy.pronoundb) to install the latest version, or [visit the plugin's store page](https://replugged.dev/store/dev.penguinspy.pronoundb).  
 
 ### Other client mods
 There's also [Juby210's PronounDB plugin](https://github.com/Juby210/Aliucord-plugins#pronoundb) for the Java version of [Aliucord](https://github.com/Aliucord/Aliucord "A Discord mod for Android"). (not affiliated)
