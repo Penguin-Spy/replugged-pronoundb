@@ -18,7 +18,7 @@ function getDiscordPronouns(userId, guildId) {
     })
   } else {
     const discordPronouns = getGuildMemberProfile(userId, guildId)?.pronouns || userProfile?.pronouns
-    return discordPronouns.replace(/[\s\u200b]+/g, ' ').trim()
+    return discordPronouns?.replace(/[\s\u200b]+/g, ' ').trim()
   }
 }
 
