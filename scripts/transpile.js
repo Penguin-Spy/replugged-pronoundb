@@ -77,7 +77,7 @@ function parseAndModifyImports(file) {
         import_identifiers = "{ " + identifiers.map(importToDestructure).join(", ") + " }"
 
       } else if((match = input.match(/^\S*/)) !== null) { // A
-        import_identifiers = `{ ${DEFAULT_KEY}: ${importToDestructure(match[0])} }`
+        import_identifiers = importToDestructure(match[0])
 
       } else {
         throw new SyntaxError(`Invalid syntax after "import ": "${input.substring(0, 16)}"...`)
@@ -158,7 +158,12 @@ function modifyExports(file) {
     match = input.match(exportRegex)
   }
 
-  output += input + ";return { " + exportList.join(", ") + " }"
+  // return just the default, or an object if multiple exports
+  if(exportList.length === 1 && exportList[0] === DEFAULT_KEY) {
+    output += input + `;return ${DEFAULT_KEY}`
+  } else {
+    output += input + ";return { " + exportList.join(", ") + " }"
+  }
 
   file.input = "";
   file.output = output;
