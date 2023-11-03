@@ -48,3 +48,6 @@ span[id^="message-username-"]:not(:hover) > :is(
 .pronoundb-settings-notice {
   margin-bottom: 20px;
 }
+.pronoundb-settings-notice a:hover {
+  text-decoration: underline;
+}

@@ -15,11 +15,9 @@ const settings = await SettingsManager.init(PLUGIN_ID, DefaultSettings)
 export async function start() {
   // pronouns in message header
   if(settings.get("show_in_chat")) {
-    webpack.waitForModule(webpack.filters.bySource(/.=.\.renderPopout,.=.\.renderRemixTag,/))
+    webpack.waitForModule(webpack.filters.byProps("UsernameDecorationTypes"))
       .then(MessageHeaderUsername => {
-        const functionKey = Object.entries(MessageHeaderUsername).find(e => typeof e[1] === "function")[0]
-
-        inject.after(MessageHeaderUsername, functionKey, ([props], res) => {
+        inject.after(MessageHeaderUsername, "default", ([props], res) => {
           if(props.message.author.bot) { return } // bots can never have pronouns (transphobic?), and trying to render them makes an invalid API call to Discord
           const headerItems = res.props.children
 

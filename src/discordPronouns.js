@@ -2,7 +2,8 @@ import { getByProps, getBySource, getFunctionBySource } from "replugged/webpack"
 
 export const UserProfileStore = getByProps("getUserProfile")
 const { getUserProfile, getGuildMemberProfile } = UserProfileStore
-const fetchUserProfile = getFunctionBySource(getBySource(/withMutualGuilds,.=.\.withMutualFriendsCount,.=.\.guildId/), "apply")
+//const fetchUserProfile = getFunctionBySource(getBySource(/withMutualGuilds,.=.\.withMutualFriendsCount,.=.\.guildId/), "apply")
+const { fetchProfile } = getByProps("fetchProfile")
 
 // wait 750 ms between queue processes (it's basically impossible to get rate-limited with this delay)
 const QUEUE_PROCESS_DELAY = 750
@@ -12,9 +13,9 @@ const queuedProfiles = []
 let queueTimeout = undefined
 
 // processes one item in the queue, and sets the timeout again if it's not empty
-function fetchProfile() {
+function processFetchQueue() {
   const [user_id, guild_id] = queuedProfiles.pop().split("-")
-  fetchUserProfile(user_id, { // this (discord) function fetches the profile and dispatches it to the UserProfileStore
+  fetchProfile(user_id, { // this (discord) function fetches the profile and dispatches it to the UserProfileStore
     guildId: guild_id !== "null" ? guild_id : undefined, // don't send the string "null" (when in DMs)
     withMutualFriendsCount: false, // these 2 params match what discord sets them to when clicking on the profile
     withMutualGuilds: true
@@ -23,7 +24,7 @@ function fetchProfile() {
 
   // if there are more profiles to fetch, set the timeout again
   if(queuedProfiles.length > 0) {
-    queueTimeout = setTimeout(fetchProfile, QUEUE_PROCESS_DELAY)
+    queueTimeout = setTimeout(processFetchQueue, QUEUE_PROCESS_DELAY)
   }
 }
 
@@ -36,7 +37,7 @@ export function usePronouns(user_id, guild_id) {
 
   queuedProfiles.push(profileIdentifier)
   if(!queueTimeout) { // only set the timeout if it's not set yet
-    queueTimeout = setTimeout(fetchProfile, QUEUE_PROCESS_DELAY)
+    queueTimeout = setTimeout(processFetchQueue, QUEUE_PROCESS_DELAY)
   }
 }
 
